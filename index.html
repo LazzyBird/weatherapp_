@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD"
+      crossorigin="anonymous"
+    />
+    <script
+      src="https://kit.fontawesome.com/732b82e005.js"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
+      crossorigin="anonymous"
+    ></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <style>
+      .weather-widget {
+        display: block;
+        font-family: "Roboto", sans-serif;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        padding: 20px;
+        padding-top: 20px;
+        margin: 40px auto;
+        max-width: 700px;
+        line-height: 1;
+      }
+
+      h2 {
+        font-weight: 700;
+        margin: 2px auto;
+        text-align: center;
+        vertical-align: middle;
+      }
+      h4,
+      h5,
+      h6,
+      p {
+        text-align: center;
+        margin: 2px auto;
+      }
+
+      .forecastRow {
+        margin: 0 auto;
+        text-align: center;
+        font-size: 10px;
+      }
+      .card-body {
+        display: block;
+        padding: 14px;
+        margin: 0 auto;
+        margin-top: 4px;
+      }
+      #currentTemp,
+      .units {
+        display: inline-block;
+      }
+
+      i {
+        color: rgb(255, 232, 83);
+      }
+
+      img {
+        height: 200px;
+        width: 200px;
+        object-fit: cover;
+      }
+      @media (max-width: 768px) {
+        img {
+          width: 50%;
+        }
+      }
+      #cityInput {
+        display: inline-block;
+        margin-right: 10px;
+        width: 186px;
+      }
+      #weatherPic {
+        width: 100%;
+        height: 100%;
+      }
+      #currentTemp {
+        font-size: 60px;
+        font-weight: 700;
+        color: #383036;
+      }
+      .units {
+        margin-top: 5px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="row weather-widget">
+        <div class="row gx-2" id="searchANDcity">
+          <div class="col d-flex">
+            <div class="p-2">
+              <input
+                type="text"
+                class="form-control"
+                id="cityInput"
+                aria-describedby="enterCity"
+                placeholder="City"
+              />
+              <button
+                type="submit"
+                class="btn btn-secondary me-2"
+                id="search-city"
+              >
+                Search
+              </button>
+              <button type="submit" class="btn btn-dark" id="getLocation">
+                <i class="fa-solid fa-location-dot"></i>
+              </button>
+            </div>
+          </div>
+          <div class="col-md-4 mb-3">
+            <h2><em id="city-header">New York</em> 🌒</h2>
+            <p id="actiual_date">03.25.2023 Monday 16:30</p>
+          </div>
+        </div>
+        <div class="row" id="imageANDtabs">
+          <div class="col-md-4 d-flex">
+            <img
+              class="img-responsive rounded mx-auto d-block"
+              id="weatherPic"
+              src="img\pexels-ryan-millier-3228675.jpg"
+              max-width:100%
+              max-heigh:
+              200px
+              alt="Photo by Ryan Millier: https://www.pexels.com/uk-ua/photo/3228675/"
+            />
+          </div>
+          <div class="col">
+            <nav class="container">
+              <ul class="nav nav-tabs">
+                <li class="nav-item">
+                  <a class="nav-link active" href="#Now" data-toggle="tab">
+                    <b>Now</b>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="#Day" data-toggle="tab">
+                    <b>Day</b>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="#Night" data-toggle="tab">
+                    <b>Night</b>
+                  </a>
+                </li>
+              </ul>
+            </nav>
+            <div class="tab-content">
+              <div class="container tab-pane active" id="Now">
+                <div class="row align-items-center">
+                  <div class="col-5 col-md-4 d-flex align-items-top">
+                    <span id="currentTemp" class="d-inline">15</span>
+                    <span class="units d-inline">
+                      <a href="#" id="celsius-link">°C</a>|
+                      <a href="#" id="fahrenheit-link">°F</a>
+                    </span>
+                  </div>
+                  <div class="col-7 col-md-8"><h4>⛅ 2m/s NE</h4></div>
+                </div>
+              </div>
+              <div class="container tab-pane" id="Day">
+                <div class="row align-items-center">
+                  <div class="col-5 col-md-4"><h1>20ºC</h1></div>
+                  <div class="col-7 col-md-8"><h4>🌤️ 2m/s NE</h4></div>
+                </div>
+              </div>
+              <div class="container tab-pane" id="Night">
+                <div class="row align-items-center">
+                  <div class="col-5 col-md-4"><h1>10ºC</h1></div>
+                  <div class="col-7 col-md-8"><h4>🌧️ 1m/s SE</h4></div>
+                </div>
+              </div>
+            </div>
+            <div class="row forecastRow">
+              <div class="card" style="width: 6rem">
+                <div class="card-body">
+                  <p>March 27</p>
+                  <i class="fa-regular fa-sun forecastIcon"></i><br />
+                  <p>17ºC</p>
+                </div>
+              </div>
+              <div class="card" style="width: 6rem">
+                <div class="card-body">
+                  <p>March 27</p>
+                  <i class="fa-regular fa-sun forecastIcon"></i><br />
+                  <p>17ºC</p>
+                </div>
+              </div>
+              <div class="card" style="width: 6rem">
+                <div class="card-body">
+                  <p>March 27</p>
+                  <i class="fa-regular fa-sun forecastIcon"></i><br />
+                  <p>17ºC</p>
+                </div>
+              </div>
+              <div class="card" style="width: 6rem">
+                <div class="card-body">
+                  <p>March 27</p>
+                  <i class="fa-regular fa-sun forecastIcon"></i><br />
+                  <p>17ºC</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="src/index.js"></script>
+  </body>
+</html>
+
+https://codesandbox.io/s/blissful-bush-ro3i72?file=/index.html:1931-1971
