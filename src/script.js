@@ -81,66 +81,56 @@ function convertTemp() {
 
 document.querySelector("#convertBtn").addEventListener("click", convertTemp);
 
-/*let apiKey = "4085d4e1d22f7753a9278110dff3ae74";
-let latitude, longitude;
+let apiKey = "4085d4e1d22f7753a9278110dff3ae74";
+let cityName;
 
-function showPosition(position) {
-  console.log(position.coords.longitude);
-  console.log(position.coords.latitude);
-  latitude = position.coords.latitude;
-  longitude = position.coords.longitude;
+function usersCity(event) {
+  let city = document.querySelector("#city-header");
+  let cityInput = document.querySelector("#cityInput");
+  cityName = cityInput.value.trim();
 
-  let uriWeather = `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${apiKey}&units=metric`;
-  axios.get(uriWeather).then(getWeather);
-}
-
-function getWeather(response) {
-  let currentTemp = Math.round(response.data.main.temp);
-  console.log(currentTemp);
-  let showTemp = document.querySelector("h1");
-  showTemp.innerHTML = `It is ${currentTemp}°C`;
-}
-
-navigator.geolocation.getCurrentPosition(showPosition);
-
-*/
-/* let isCelsius = true; // Set default unit to Celsius
-const currentTemp = document.querySelector("#currentTemp");
-const unit = document.querySelector("#unit");
-
-function convertTemp() {
-  let temp = parseFloat(currentTemp.textContent);
-
-  if (isCelsius) {
-    // Convert Celsius to Fahrenheit
-    temp = temp * 1.8 + 32;
-    isCelsius = false;
-    unit.textContent = "ºF";
-  } else {
-    // Convert Fahrenheit to Celsius
-    temp = (temp - 32) / 1.8;
-    isCelsius = true;
-    unit.textContent = "ºC";
+  if (cityName === "") {
+    cityInput.placeholder = "Please enter a city";
+    cityInput.value = "";
+    return;
   }
 
-  currentTemp.textContent = temp.toFixed(1);
+  city.innerHTML = cityName;
+  cityInput.value = "";
+
+  searchCity();
 }
 
-document.querySelector("#convertBtn").addEventListener("click", convertTemp);
-*/
-/*function convertToFahrenheit(event) {
-  event.preventDefault();
-  let temperatureElement = document.querySelector("#temperature");
-  temperatureElement.innerHTML = 66;
+document.getElementById("search-city").addEventListener("click", usersCity);
+document
+  .getElementById("cityInput")
+  .addEventListener("keydown", function (event) {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      usersCity();
+    }
+  });
+
+
+function searchCity() {
+  let uriWeather = `https://api.openweathermap.org/data/2.5/weather?q=${cityName}&appid=${apiKey}&units=metric`;
+
+  axios.get(uriWeather)
+    .then(function (response) {
+      let currentTemp = Math.round(response.data.main.temp);
+      let showTemp = document.getElementById("currentTemp");
+      showTemp.innerHTML = `${currentTemp}°`;
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
 }
 
-function convertToCelsius(event) {
-  event.preventDefault();
-  let temperatureElement = document.querySelector("#temperature");
-  temperatureElement.innerHTML = 19;
-}
-let fahrenheitLink = document.querySelector("#fahrenheit-link");
-fahrenheitLink.addEventListener("click", convertToFahrenheit);
-
-let celsiusLink = document.querySelector("#celsius-link");
-celsiusLink.addEventListener("click", convertToCelsius); */
+document
+  .getElementById("cityInput")
+  .addEventListener("keydown", function (event) {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      usersCity();
+    }
+  });
